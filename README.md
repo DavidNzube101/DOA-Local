@@ -104,44 +104,6 @@ Daughters of Aether is a fast-paced, competitive multiplayer game that demonstra
 5. **Battle**: Real-time PvP combat with health, mana, and special moves
 6. **Win Rewards**: Victor takes the entire stake pool
 
-## 🔧 Technical Architecture
-
-### Frontend (Nuxt 3 + Vue 3)
-- **3D Graphics**: Three.js for character models and arena
-- **Wallet Integration**: Solana wallet adapter with Backpack support
-- **Real-time UI**: Vue 3 reactive components with Socket.IO client
-
-### Backend (Node.js + Socket.IO)
-- **Matchmaking**: Real-time player pairing and battle coordination
-- **Contract Integration**: Solana program calls for staking and resolution
-- **State Management**: Battle state synchronization across players
-
-### Smart Contract (Anchor + Rust)
-- **Battle Logic**: On-chain battle resolution and reward distribution
-- **Staking System**: Token staking and pool management
-- **Access Control**: Character and arena access validation
-
-## 🏆 Bounty Criteria Alignment
-
-### ✅ Gameplay & Fun (40 points)
-- **Engaging**: Fast-paced PvP battles with strategic depth
-- **Replayable**: Multiple characters, different strategies, competitive rewards
-- **Competitive**: Real-time combat with skill-based gameplay
-
-### ✅ Testnet Integration (30 points)
-- **Creative Use**: GOR tokens for staking, rewards, and access control
-- **Correct Implementation**: Full Gorbagana infrastructure utilization
-- **Performance**: Leverages Gorbagana's speed and fairness
-
-### ✅ User Attraction (20 points)
-- **New Users**: Attracts both gamers and Web3 enthusiasts
-- **Hype Generation**: Unique 3D Web3 PvP concept
-- **Community Building**: Fosters competitive gaming community
-
-### ✅ Social Promotion (10 points)
-- **Visibility**: Ready for #GorbaganaTestnet promotion
-- **Community Engagement**: Integrates with Gorbagana ecosystem
-
 ## 📱 Wallet Support
 
 ### Primary: Backpack Wallet
@@ -163,12 +125,6 @@ Daughters of Aether is a fast-paced, competitive multiplayer game that demonstra
 ### Coming Soon
 - Astraea, Rhiannon, Aurelia, Celeste, Thalassa, Isolde, Elara, Zephyra, Morwen
 
-## 🔗 Resources
-
-- **Documentation**: [Gorbagana Docs](https://docs.gorbagana.wtf/)
-- **Telegram**: [Gorbagana Portal](https://t.me/gorbagana_portal)
-- **Explorer**: [Gorbagana Explorer](https://explorer.gorbagana.wtf/)
-- **Faucet**: Request GOR tokens in Telegram
 
 ## 🤝 Contribution
 
@@ -182,6 +138,6 @@ Boost Software License - Version 1.0 - August 17th, 2003
 
 ---
 
-**Built for the Gorbagana bounty by Skipp** 🚀
+**Built on trash chain, Gorbagana. Developed by Skipp** 🚀
 
 *Demonstrating the power of fast, fair, and fun on-chain multiplayer gaming.* 
