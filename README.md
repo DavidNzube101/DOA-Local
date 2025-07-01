@@ -106,13 +106,13 @@ Daughters of Aether is a fast-paced, competitive multiplayer game that demonstra
 
 ## 📱 Wallet Support
 
-### Primary: Backpack Wallet
+### Primary: Backpack Wallet ! [Download](https://backpack.app)
 - **Full Support**: Complete integration with Gorbagana testnet
 - **Easy Setup**: Simple configuration for testnet tokens
 - **User Experience**: Seamless connection and transaction signing
 
-### Alternative: Phantom Wallet
-- **Compatible**: Works with Gorbagana testnet
+### Alternative: Phantom Wallet ! [Download](https://phantom.com)
+- **Compatible**: Works with Gorbagana testnet. Note that you won't be able to see your GOR Tokens and can only stake with it. For full support, use Backpack.
 - **Fallback Option**: Available if Backpack is not preferred
 
 ## 🎨 Game Characters
