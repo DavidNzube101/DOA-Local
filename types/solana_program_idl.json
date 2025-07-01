@@ -1,0 +1,216 @@
+{
+    "version": "0.1.0",
+    "name": "daughters_of_aether",
+    "instructions": [
+        {
+            "name": "createBattle",
+            "accounts": [
+                {
+                    "name": "battle",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "player",
+                    "isMut": true,
+                    "isSigner": true
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": [
+                {
+                    "name": "stake",
+                    "type": "u64"
+                },
+                {
+                    "name": "durationSeconds",
+                    "type": "i64"
+                }
+            ]
+        },
+        {
+            "name": "joinBattle",
+            "accounts": [
+                {
+                    "name": "battle",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "playerTwoBattle",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isSigner": true
+                },
+                {
+                    "name": "playerOne",
+                    "isMut": false,
+                    "isSigner": false
+                },
+                {
+                    "name": "playerTwo",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "systemProgram",
+                    "isMut": false,
+                    "isSigner": false
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "resolveBattle",
+            "accounts": [
+                {
+                    "name": "battle",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "winner",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isSigner": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "winner",
+                    "type": "publicKey"
+                }
+            ]
+        },
+        {
+            "name": "forfeitBattle",
+            "accounts": [
+                {
+                    "name": "battle",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "winner",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isSigner": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "winnerPlayerPubkey",
+                    "type": "publicKey"
+                }
+            ]
+        },
+        {
+            "name": "cancelGame",
+            "accounts": [
+                {
+                    "name": "battle",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "playerOne",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
+                    "name": "authority",
+                    "isMut": false,
+                    "isSigner": true
+                }
+            ],
+            "args": []
+        }
+    ],
+    "accounts": [
+        {
+            "name": "Battle",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "stake",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "players",
+                        "type": {
+                            "array": [
+                                "publicKey",
+                                2
+                            ]
+                        }
+                    },
+                    {
+                        "name": "winner",
+                        "type": "publicKey"
+                    },
+                    {
+                        "name": "deadline",
+                        "type": "i64"
+                    }
+                ]
+            }
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "AlreadyJoined",
+            "msg": "Second player slot in master battle is already filled."
+        },
+        {
+            "code": 6001,
+            "name": "InvalidWinner",
+            "msg": "Winner must be one of the players"
+        },
+        {
+            "code": 6002,
+            "name": "BattleNotYetExpired",
+            "msg": "Battle has not yet reached its deadline."
+        },
+        {
+            "code": 6003,
+            "name": "BattleAlreadyStarted",
+            "msg": "Battle has already started, cannot be cancelled."
+        },
+        {
+            "code": 6004,
+            "name": "CancellationNotAllowed",
+            "msg": "Cancellation conditions not met (e.g., battle was joined or deadline not passed)."
+        },
+        {
+            "code": 6005,
+            "name": "InvalidForfeitWinner",
+            "msg": "Invalid player provided as winner for forfeit."
+        },
+        {
+            "code": 6006,
+            "name": "UnauthorizedServer",
+            "msg": "Only the authorized server can perform this action."
+        }
+    ],
+    "metadata": {
+        "address": "5RV8MAYjHoSb16VkqjqN5KGX139MULDR6GHuYhxettKT"
+    }
+}

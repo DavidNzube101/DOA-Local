@@ -1,0 +1,154 @@
+Running client...
+  client.ts:
+    🎮 DAUGHTERS OF AETHER - TEST SUITE
+    ========================================
+    🚀 Starting Full Game Flow Test
+    🏗️ Setting up test accounts...
+
+$ 
+    ✅ Test accounts funded
+
+$ 
+    - Player 1: 3pcD4piBYJ4rpfWhfXkxzwpp5CwBJ8afJJsSCx1X6TCL
+
+$ 
+    - Player 2: jdPoTg7Gqwuj4JjEiy3vt2TuGTEN8W3ZU5ELseFrag6
+
+$ 
+    - Server Auth: 2RNksAgJAjwb5iXqoh6sNZW7Fjabqg7WeE64KywEyC2C
+
+$ 
+    
+📋 STEP 1: Player 1 Creates Battle
+
+$ 
+    ✅ Player 1 battle created: 2AboeFEq5VMtRR5xGLDBsAUmWhH3ZfZNSjW9vRqm8Z8Ya6Adw7RqVwsbEdMgMhDujiHa6L3oq1ZbTPehb5SPhBwc
+
+$ 
+    
+📋 STEP 2: Player 2 Creates Battle
+
+$ 
+    ✅ Player 2 battle created: 3Yr2uwquo5bSrfGbdRfjisiBuj7F9oQJfFxvu8pgGNAUPpapHb3HgkqRyFho8xmgGpeqb8oioHy7zXmp7mD5H8DM
+
+$ 
+    
+📋 STEP 3: Server Pairs Players
+
+$ 
+    ✅ Players paired and stakes aggregated: 4VnkzAd1dTUQPgLNnwHkDo7s4fa7gTTyh4XBouTk8nCweNuchDYprx9XeomvMwEa7ttvtiJFK67QoEgpGkJi7BdN
+
+$ 
+    💰 Total stake: 2000000
+
+$ 
+    👥 Players: [ '3pcD4piBYJ4rpfWhfXkxzwpp5CwBJ8afJJsSCx1X6TCL',
+  'jdPoTg7Gqwuj4JjEiy3vt2TuGTEN8W3ZU5ELseFrag6' ]
+
+$ 
+    
+📋 STEP 4: Wait for Battle Deadline
+
+$ 
+    
+📋 STEP 5: Server Resolves Battle
+
+$ 
+    ✅ Battle resolved: 4h2Y1VuGXkWnEoLLRqhXaHSTbfAt5sqYy6kDmp4sLQMUhmrVdK295qmw1Wyuxw5ozfBCMuKqm6yNftuYFFqXvYgp
+
+$ 
+    🏆 Winner payout: 0.002 SOL
+
+$ 
+    🎉 Winner recorded: 3pcD4piBYJ4rpfWhfXkxzwpp5CwBJ8afJJsSCx1X6TCL
+
+$ 
+    
+ 
+🚨 Testing Forfeit Battle
+
+$ 
+    🏗️ Setting up test accounts...
+
+$ 
+    ✅ Test accounts funded
+
+$ 
+    - Player 1: 3ZUyDr3tPLLjSYWhKvZ3LbcnN5ZioiNgyGYML23CibpJ
+
+$ 
+    - Player 2: FNcstjYDjNUASxXAcmaw1Bk7SiDdVSnt5StAMZVptYjD
+
+$ 
+    - Server Auth: 2RNksAgJAjwb5iXqoh6sNZW7Fjabqg7WeE64KywEyC2C
+
+$ 
+    ⚔️ Battle started, Player 2 forfeits...
+
+$ 
+    ✅ Forfeit processed: 3LGzy24e5PpkUS8JNzn9LJUwwrG7cGKyw4JdtCJ4oNpWLJPrRNU4yMKf17FVsKj3FFXDNBQ9rgkPhuVFP9jezuhp
+
+$ 
+    🏆 Winner payout: 0.002 SOL
+
+$ 
+    
+ 
+❌ Testing Game Cancellation
+
+$ 
+    🏗️ Setting up test accounts...
+
+$ 
+    ✅ Test accounts funded
+
+$ 
+    - Player 1: H4PxXRZV49CJvXtbopATnY7Fmbns2QNqPNQYMF1nT2eG
+
+$ 
+    - Player 2: HKtU1qB6w4iD4kdvCLwEup3ApPE8amcoc7AumMHRCCiE
+
+$ 
+    - Server Auth: 2RNksAgJAjwb5iXqoh6sNZW7Fjabqg7WeE64KywEyC2C
+
+$ 
+    ⏰ Waiting for deadline to pass...
+
+$ 
+    ✅ Game cancelled: M28xvz7pvMv7TG6UMmp961uXiujoacajeTWQNUiPP5NaWUgU4G7jem7tgXeccT5JbxGv9MoqCzdFjW2obmzW33u
+
+$ 
+    💰 Refund amount: 0.101 SOL
+
+$ 
+    ✅ Battle account closed
+
+$ 
+    
+ 
+🚫 Testing Error Cases
+
+$ 
+    🏗️ Setting up test accounts...
+
+$ 
+    ✅ Test accounts funded
+
+$ 
+    - Player 1: Ge2XgGPXpopBms2wWeYNd6hrbbpCik7KrBAzWmkfbvow
+
+$ 
+    - Player 2: B4AHdRm9qGHJVAVB3EAuaAeWx6KmcczqgERF4zkVhPjL
+
+$ 
+    - Server Auth: 2RNksAgJAjwb5iXqoh6sNZW7Fjabqg7WeE64KywEyC2C
+
+$ 
+    ✅ Correctly prevented cancellation after battle started
+
+$ 
+    ✅ Correctly prevented early resolution
+
+$ 
+    
+🎉 ALL TESTS PASSED!

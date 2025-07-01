@@ -1,0 +1,82 @@
+{
+  "characters": [
+    {
+      "name": "Nyx",
+      "available": true,
+      "element": "DARKNESS",
+      "description": "The Shadow Weaver, mistress of the unseen.",
+      "animations": ["idle", "move", "attack", "defend"],
+      "glowColor": "#7f00ff",
+      "attackGlowColor": "#b400ff",
+      "maxHealth": 80,
+      "maxMana": 16
+    },
+    {
+      "name": "Lyra",
+      "available": true,
+      "element": "LIGHT",
+      "description": "The Radiant Guardian, beacon of hope.",
+      "animations": ["idle", "move", "attack", "defend"],
+      "glowColor": "#00e5ff",
+      "attackGlowColor": "#fff700",
+      "maxHealth": 120,
+      "maxMana": 8
+    },
+    {
+      "name": "Seraphina",
+      "available": true,
+      "element": "FIRE",
+      "description": "The Flame Dancer, bringer of warmth and fury.",
+      "animations": ["idle", "move", "attack", "defend"],
+      "glowColor": "#ff4500",
+      "attackGlowColor": "#ffb300",
+      "maxHealth": 100,
+      "maxMana": 12
+    },
+    {
+      "name": "Astraea",
+      "available": false,
+      "animations": []
+    },
+    {
+      "name": "Rhiannon",
+      "available": false,
+      "animations": []
+    },
+    {
+      "name": "Aurelia",
+      "available": false,
+      "animations": []
+    },
+    {
+      "name": "Celeste",
+      "available": false,
+      "animations": []
+    },
+    {
+      "name": "Thalassa",
+      "available": false,
+      "animations": []
+    },
+    {
+      "name": "Isolde",
+      "available": false,
+      "animations": []
+    },
+    {
+      "name": "Elara",
+      "available": false,
+      "animations": []
+    },
+    {
+      "name": "Zephyra",
+      "available": false,
+      "animations": []
+    },
+    {
+      "name": "Morwen",
+      "available": false,
+      "animations": []
+    }
+  ]
+} 

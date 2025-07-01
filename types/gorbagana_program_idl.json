@@ -1,0 +1,266 @@
+{
+  "version": "0.1.0",
+  "name": "daughters_of_aether",
+  "instructions": [
+    {
+      "name": "createBattle",
+      "discriminator": [
+        155,
+        234,
+        231,
+        146,
+        236,
+        158,
+        162,
+        80
+      ],
+      "accounts": [
+        {
+          "name": "battle",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "player",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "stake",
+          "type": "u64"
+        },
+        {
+          "name": "durationSeconds",
+          "type": "i64"
+        }
+      ]
+    },
+    {
+      "name": "joinBattle",
+      "discriminator": [
+        123,
+        130,
+        114,
+        10,
+        104,
+        28,
+        47,
+        80
+      ],
+      "accounts": [
+        {
+          "name": "battle",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerTwoBattle",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "playerOne",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "playerTwo",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "resolveBattle",
+      "discriminator": [
+        48,
+        70,
+        158,
+        187,
+        203,
+        191,
+        182,
+        161
+      ],
+      "accounts": [
+        {
+          "name": "battle",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "winner",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "forfeitBattle",
+      "discriminator": [
+        114,
+        218,
+        139,
+        219,
+        120,
+        201,
+        180,
+        51
+      ],
+      "accounts": [
+        {
+          "name": "battle",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "winner",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "cancelGame",
+      "discriminator": [
+        206,
+        149,
+        98,
+        145,
+        94,
+        31,
+        18,
+        44
+      ],
+      "accounts": [
+        {
+          "name": "battle",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "playerOne",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        }
+      ],
+      "args": []
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Battle",
+      "discriminator": [
+        94,
+        224,
+        222,
+        30,
+        125,
+        174,
+        184,
+        98
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "stake",
+            "type": "u64"
+          },
+          {
+            "name": "players",
+            "type": {
+              "array": [
+                "publicKey",
+                2
+              ]
+            }
+          },
+          {
+            "name": "winner",
+            "type": "publicKey"
+          },
+          {
+            "name": "deadline",
+            "type": "i64"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "AlreadyJoined",
+      "msg": "Second player slot in master battle is already filled."
+    },
+    {
+      "code": 6001,
+      "name": "InvalidWinner",
+      "msg": "Winner must be one of the players"
+    },
+    {
+      "code": 6002,
+      "name": "BattleNotYetExpired",
+      "msg": "Battle has not yet reached its deadline."
+    },
+    {
+      "code": 6003,
+      "name": "BattleAlreadyStarted",
+      "msg": "Battle has already started, cannot be cancelled."
+    },
+    {
+      "code": 6004,
+      "name": "CancellationNotAllowed",
+      "msg": "Cancellation conditions not met (e.g., battle was joined or deadline not passed)."
+    },
+    {
+      "code": 6005,
+      "name": "InvalidForfeitWinner",
+      "msg": "Invalid player provided as winner for forfeit."
+    },
+    {
+      "code": 6006,
+      "name": "UnauthorizedServer",
+      "msg": "Only the authorized server can perform this action."
+    }
+  ],
+  "metadata": {
+    "address": "GAB3CVmCbarpepefKNFEGEUGw6RzcMx9LSGER2Hg3FU2"
+  }
+}
