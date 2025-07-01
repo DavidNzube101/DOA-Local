@@ -56,7 +56,7 @@ Daughters of Aether is a fast-paced, competitive multiplayer game that demonstra
 ### Prerequisites
 - Node.js 18+ and pnpm
 - Backpack wallet (configured for Gorbagana testnet)
-- GOR testnet tokens (request in [Telegram](https://t.me/gorbagana_portal))
+- GOR testnet tokens (get from [Faucet](https://faucet.gorbagana.wtf))
 
 ### Installation
 
@@ -98,7 +98,7 @@ Daughters of Aether is a fast-paced, competitive multiplayer game that demonstra
 ### How to Play
 
 1. **Connect Wallet**: Use Backpack wallet connected to Gorbagana testnet
-2. **Get GOR Tokens**: Request testnet tokens in the [Gorbagana Telegram](https://t.me/gorbagana_portal)
+2. **Get GOR Tokens**: Request testnet tokens in the [Gorbagana Faucet](https:faucet.gorbagana.wtf)
 3. **Select Character**: Choose from Nyx (Darkness), Lyra (Light), or Seraphina (Fire)
 4. **Stake Tokens**: Stake GOR tokens to enter the arena
 5. **Battle**: Real-time PvP combat with health, mana, and special moves
@@ -130,7 +130,7 @@ Daughters of Aether is a fast-paced, competitive multiplayer game that demonstra
 
 - **Issues**: [Report bugs](https://github.com/DavidNzube101/DOA-Local/issues)
 - **Features**: [Submit PRs](https://github.com/DavidNzube101/DOA-Local/pulls)
-- **Community**: Join the [Gorbagana Telegram](https://t.me/gorbagana_portal)
+- **Community**: Join the [Gorbagana Faucet](https:faucet.gorbagana.wtf)
 
 ## 📄 License
 
