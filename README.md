@@ -89,7 +89,7 @@ Daughters of Aether is a fast-paced, competitive multiplayer game that demonstra
 
 5. **Start the game:**
    ```bash
-   pnpm start
+   pnpm preview
    ```
 
 6. **Open your browser:**
