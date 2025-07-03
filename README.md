@@ -60,40 +60,38 @@ Daughters of Aether is a fast-paced, competitive multiplayer game that demonstra
 
 ### Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/DavidNzube101/DOA-Local.git
-   cd DOA-Local
-   ```
+#### Quick Install
 
-2. **Install dependencies:**
-   ```bash
-   pnpm install
-   ```
+**Linux:**
+```bash
+curl -L https://raw.githubusercontent.com/DavidNzube101/DOA-Launcher/master/releases/DOA-Launcher-linux-amd64 -o doa-launcher && chmod +x doa-launcher && sudo mv doa-launcher /usr/local/bin/
+```
 
-3. **Configure environment:**
-   ```bash
-   cp .env.example .env
-   ```
-   
-   Edit `.env` and uncomment these lines:
-   - Line 5, 6, 7 (Gorbagana RPC and program settings)
-   - Line 11, 12 (Backend server configuration)
-   - Line 16, 17 (Wallet and contract settings)
-   - Line 20 (Additional configuration)
+**macOS:**
+```bash
+curl -L https://raw.githubusercontent.com/DavidNzube101/DOA-Launcher/master/releases/DOA-Launcher-darwin-amd64 -o doa-launcher && chmod +x doa-launcher && sudo mv doa-launcher /usr/local/bin/
+```
 
-4. **Build the game:**
-   ```bash
-   pnpm build
-   ```
+**Windows (PowerShell):**
+```powershell
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/DavidNzube101/DOA-Launcher/master/releases/DOA-Launcher-windows-amd64.exe" -OutFile "doa-launcher.exe"
+```
 
-5. **Start the game:**
-   ```bash
-   pnpm preview
-   ```
+#### Manual Download
+1. Go to the [releases folder](https://github.com/DavidNzube101/DOA-Launcher/tree/master/releases)
+2. Download the appropriate binary for your platform:
+   - **Linux**: `DOA-Launcher-linux-amd64`
+   - **macOS**: `DOA-Launcher-darwin-amd64`  
+   - **Windows**: `DOA-Launcher-windows-amd64.exe`
+3. Make it executable (Linux/macOS): `chmod +x DOA-Launcher-*`
+4. Move to your PATH: `sudo mv DOA-Launcher-* /usr/local/bin/doa-launcher`
 
-6. **Open your browser:**
-   Visit `http://localhost:3000`
+#### Usage
+
+   Just run 
+```bash
+doa-launcher
+```
 
 ### How to Play
 
@@ -140,4 +138,4 @@ Boost Software License - Version 1.0 - August 17th, 2003
 
 **Built on trash chain, Gorbagana. Developed by Skipp** 🚀
 
-*Demonstrating the power of fast, fair, and fun on-chain multiplayer gaming.* 
+*Demonstrating the power of fast, fair, and fun on-chain multiplayer gaming.*
