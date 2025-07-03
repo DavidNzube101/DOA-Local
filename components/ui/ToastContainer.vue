@@ -1,11 +1,11 @@
 <template>
-  <div class="toast-container">
-    <TransitionGroup name="toast" tag="div" class="toast-list">
+  <div class="toast-container" @mouseenter="hovered = true" @mouseleave="hovered = false">
+    <TransitionGroup name="toast" tag="div" class="toast-list" :class="{ expanded: hovered }">
       <div
         v-for="toast in toasts"
         :key="toast.id"
         class="toast"
-        :class="`toast-${toast.type}`"
+        :class="[`toast-${toast.type}`, { expanded: hovered }]"
       >
         <div class="toast-content">
           <Icon 
@@ -20,15 +20,20 @@
         >
           <Icon name="heroicons:x-mark" class="w-4 h-4" />
         </button>
+        <div class="toast-progress-bar" :style="getProgressStyle(toast)"></div>
       </div>
     </TransitionGroup>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useToast } from '~/composables/useToast'
 
 const { toasts, removeToast } = useToast()
+const hovered = ref(false)
+const now = ref(Date.now())
+setInterval(() => { now.value = Date.now() }, 100)
 
 const getToastIcon = (type: string) => {
   switch (type) {
@@ -44,12 +49,21 @@ const getToastIcon = (type: string) => {
       return 'heroicons:information-circle'
   }
 }
+
+const getProgressStyle = (toast: any) => {
+  const elapsed = now.value - parseInt(toast.id)
+  const pct = Math.max(0, 1 - elapsed / (toast.duration || 5000))
+  return {
+    width: pct * 100 + '%',
+    transition: 'width 0.1s linear',
+  }
+}
 </script>
 
 <style scoped>
 .toast-container {
   position: fixed;
-  top: 2rem;
+  bottom: 2rem;
   right: 2rem;
   z-index: 9999;
   pointer-events: none;
@@ -57,8 +71,24 @@ const getToastIcon = (type: string) => {
 
 .toast-list {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 0.5rem;
+  transition: gap 0.3s;
+}
+
+.toast-list:not(.expanded) .toast:not(:last-child) {
+  margin-bottom: -2.2rem;
+  opacity: 0.85;
+  filter: blur(0.5px);
+  pointer-events: none;
+  transition: margin 0.3s, opacity 0.3s, filter 0.3s;
+}
+
+.toast-list.expanded .toast {
+  margin-bottom: 0.5rem;
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
 }
 
 .toast {
@@ -73,6 +103,10 @@ const getToastIcon = (type: string) => {
   border: 1px solid rgba(255, 255, 255, 0.1);
   pointer-events: auto;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  margin-bottom: 0.5rem;
+  transition: margin 0.3s, opacity 0.3s, filter 0.3s;
+  position: relative;
+  overflow: hidden;
 }
 
 .toast-content {
@@ -100,6 +134,16 @@ const getToastIcon = (type: string) => {
 
 .toast-close:hover {
   opacity: 1;
+}
+
+.toast-progress-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #22c55e, #f59e0b, #ef4444);
+  border-radius: 0 0 8px 8px;
+  transition: width 0.1s linear;
 }
 
 /* Toast Types */
@@ -150,7 +194,7 @@ const getToastIcon = (type: string) => {
 /* Responsive */
 @media (max-width: 768px) {
   .toast-container {
-    top: 1rem;
+    bottom: 1rem;
     right: 1rem;
     left: 1rem;
   }

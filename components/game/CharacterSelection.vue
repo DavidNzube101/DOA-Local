@@ -91,11 +91,13 @@ import { ref, onMounted, watch, nextTick, reactive } from 'vue'
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { useSound } from '~/composables/useSound'
+import { useToast } from '~/composables/useToast'
 
 const emit = defineEmits<{ 'character-selected': [character: any] }>()
 
 // Sound system
 const { playClickSound } = useSound()
+const { success: showSuccess } = useToast()
 
 const hoveredCharacter = ref<string | null>(null)
 const selectedCharacter = ref<any | null>(null)
@@ -118,6 +120,7 @@ onMounted(() => {
 function selectCharacter(character: any) {
   playClickSound()
   selectedCharacter.value = character
+  showSuccess(`Selected ${character.name}!`)
 }
 
 const confirmSelection = () => {

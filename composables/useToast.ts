@@ -1,5 +1,8 @@
 import { ref } from 'vue'
 
+// Make toasts globally reactive
+const globalToasts = ref([])
+
 export interface Toast {
   id: string
   type: 'success' | 'error' | 'info' | 'warning'
@@ -8,25 +11,21 @@ export interface Toast {
 }
 
 export function useToast() {
-  const toasts = ref<Toast[]>([])
+  const toasts = globalToasts
 
   const addToast = (toast: Omit<Toast, 'id'>) => {
     const id = Date.now().toString()
+    const duration = toast.duration ?? 5000
     const newToast: Toast = {
       id,
-      duration: 5000, // Default 5 seconds
+      duration,
       ...toast
     }
-    
     toasts.value.push(newToast)
-    
     // Auto remove after duration
-    if (newToast.duration) {
-      setTimeout(() => {
-        removeToast(id)
-      }, newToast.duration)
-    }
-    
+    setTimeout(() => {
+      removeToast(id)
+    }, duration)
     return id
   }
 

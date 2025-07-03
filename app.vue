@@ -173,6 +173,23 @@ onMounted(async () => {
       showError(err?.error || 'Battle resolution failed')
       console.error('[BATTLE_RESOLUTION_ERROR]', err)
     })
+    // Add refund toast listeners
+    socket.value.on('stake_refunded', (data) => {
+      let msg = 'Your stake has been refunded to your wallet.'
+      if (data && data.txid) {
+        msg += ` (Tx: ${data.txid.slice(0, 8)}...)`
+      }
+      showSuccess(msg)
+    })
+    socket.value.on('stake_refund_failed', (data) => {
+      showError('Stake refund failed: ' + (data?.error || 'Unknown error'))
+    })
+    socket.value.on('match_timeout', () => {
+      waitingForOpponent.value = false
+      matchTimeoutPopup.value = true
+      clearMatchmakingInterval()
+      showInfo('No opponent found. You have been returned to the lobby. Refund is in process and will be sent after the battle deadline.')
+    })
   }
 })
 
@@ -196,6 +213,7 @@ const onWalletConnected = (publicKey: string, balance: number, wallet: any) => {
   walletAddress.value = publicKey
   walletBalance.value = balance
   walletAdapter.value = wallet
+  showSuccess('Connected wallet successfully')
 }
 
 const onCharacterSelected = (character: Character) => {
