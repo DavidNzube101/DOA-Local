@@ -23,8 +23,8 @@ export function useToast() {
     }
     toasts.value.push(newToast)
     // Auto remove after duration
-    setTimeout(() => {
-      removeToast(id)
+      setTimeout(() => {
+        removeToast(id)
     }, duration)
     return id
   }

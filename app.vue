@@ -94,6 +94,9 @@ const fadeDuration = 1000 // ms
 const socket = ref<Socket | null>(null)
 const battleState = ref(null)
 
+const waitingForOpponent = ref(false)
+const matchTimeoutPopup = ref(false)
+
 // Sound system
 const { playClickSound } = useSound()
 
@@ -142,6 +145,57 @@ function fadeOutGameTrack() {
   step()
 }
 
+function ensureSocket() {
+  if (!socket.value) {
+    socket.value = io(config.public.MATCHMAKING_SERVER_URL)
+    attachSocketListeners()
+  }
+}
+
+function attachSocketListeners() {
+  if (!socket.value) return
+  // Remove all listeners first to avoid duplicates
+  socket.value.removeAllListeners()
+  socket.value.on('battle_state', (state) => {
+    battleState.value = state
+    showSuccess('Battle state synced from blockchain!')
+    console.log('[BATTLE_STATE]', state)
+  })
+  socket.value.on('match_error', (err) => {
+    showError(err?.error || 'Matchmaking error')
+    console.error('[MATCH_ERROR]', err)
+  })
+  socket.value.on('battle_resolved', (data) => {
+    showSuccess(`Battle resolved! ${data.message}`)
+    console.log('[BATTLE_RESOLVED]', data)
+  })
+  socket.value.on('battle_resolution_error', (err) => {
+    showError(err?.error || 'Battle resolution failed')
+    console.error('[BATTLE_RESOLUTION_ERROR]', err)
+  })
+  socket.value.on('stake_refunded', (data) => {
+    let msg = 'Your stake has been refunded to your wallet.'
+    if (data && data.txid) {
+      const url = `https://explorer.gorbagana.wtf/${data.txid}`
+      msg += ` (<a href='${url}' target='_blank' rel='noopener noreferrer'>Tx: ${data.txid.slice(0, 8)}...</a>)`
+    }
+    showSuccess(msg)
+  })
+  socket.value.on('stake_refund_failed', (data) => {
+    showError('Stake refund failed: ' + (data?.error || 'Unknown error'))
+  })
+  socket.value.on('match_timeout', () => {
+    waitingForOpponent.value = false
+    matchTimeoutPopup.value = true
+    clearMatchmakingInterval()
+    showInfo('No opponent found. You have been returned to the lobby. Refund is in process and will be sent after the battle deadline.')
+  })
+}
+
+onMounted(() => {
+  ensureSocket()
+})
+
 onMounted(async () => {
   // Only play music after user interaction (browser autoplay policy)
   const startMusic = () => {
@@ -153,52 +207,15 @@ onMounted(async () => {
   window.addEventListener('click', startMusic)
   window.addEventListener('pointerdown', startMusic)
   window.addEventListener('keydown', startMusic)
-
-  // Socket event listeners for battle state and errors
-  if (socket.value) {
-    socket.value.on('battle_state', (state) => {
-      battleState.value = state
-      showSuccess('Battle state synced from blockchain!')
-      console.log('[BATTLE_STATE]', state)
-    })
-    socket.value.on('match_error', (err) => {
-      showError(err?.error || 'Matchmaking error')
-      console.error('[MATCH_ERROR]', err)
-    })
-    socket.value.on('battle_resolved', (data) => {
-      showSuccess(`Battle resolved! ${data.message}`)
-      console.log('[BATTLE_RESOLVED]', data)
-    })
-    socket.value.on('battle_resolution_error', (err) => {
-      showError(err?.error || 'Battle resolution failed')
-      console.error('[BATTLE_RESOLUTION_ERROR]', err)
-    })
-    // Add refund toast listeners
-    socket.value.on('stake_refunded', (data) => {
-      let msg = 'Your stake has been refunded to your wallet.'
-      if (data && data.txid) {
-        msg += ` (Tx: ${data.txid.slice(0, 8)}...)`
-      }
-      showSuccess(msg)
-    })
-    socket.value.on('stake_refund_failed', (data) => {
-      showError('Stake refund failed: ' + (data?.error || 'Unknown error'))
-    })
-    socket.value.on('match_timeout', () => {
-      waitingForOpponent.value = false
-      matchTimeoutPopup.value = true
-      clearMatchmakingInterval()
-      showInfo('No opponent found. You have been returned to the lobby. Refund is in process and will be sent after the battle deadline.')
-    })
-  }
 })
 
 onUnmounted(() => {
   if (bgm.value) bgm.value.pause()
-  if (socket.value) {
-    socket.value.disconnect()
-    socket.value = null
-  }
+  // Do NOT disconnect the socket here; keep it alive for refund events
+  // if (socket.value) {
+  //   socket.value.disconnect()
+  //   socket.value = null
+  // }
 })
 
 if (typeof window !== 'undefined') {
@@ -214,16 +231,14 @@ const onWalletConnected = (publicKey: string, balance: number, wallet: any) => {
   walletBalance.value = balance
   walletAdapter.value = wallet
   showSuccess('Connected wallet successfully')
+  ensureSocket() // Make sure socket is initialized and listeners are attached
 }
 
 const onCharacterSelected = (character: Character) => {
   playClickSound()
   selectedCharacter.value = character
   inLobby.value = true
-  // Ensure socket is created when entering the lobby
-  if (!socket.value) {
-    socket.value = io(config.public.MATCHMAKING_SERVER_URL)
-  }
+  ensureSocket()
 }
 
 const onShowCredits = () => {

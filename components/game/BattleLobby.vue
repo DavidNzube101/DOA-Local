@@ -112,7 +112,7 @@
     <div v-if="matchTimeoutPopup" class="modal-overlay">
       <div class="modal-content">
         <h2>No Opponent Found</h2>
-        <p>No one joined your game in time. You have been returned to the lobby and your stake refunded.</p>
+        <p>No one joined your game in time. You have been returned to the lobby and your stake refund in process.</p>
         <button @click="closeTimeoutPopup">OK</button>
       </div>
     </div>
@@ -217,6 +217,11 @@ const startMatchmaking = (battleAccountPubkey: string) => {
     waitingForOpponent.value = false
     matchTimeoutPopup.value = true
     clearMatchmakingInterval()
+    // Auto-close after 3 seconds
+    setTimeout(() => {
+      matchTimeoutPopup.value = false
+      // Optionally emit an event or set state to return to lobby if needed
+    }, 3000)
   })
   matchmakingInterval = setInterval(() => {
     matchmakingTimer.value--
@@ -295,6 +300,7 @@ const enterBattle = async () => {
 const closeTimeoutPopup = () => {
   playClickSound()
   matchTimeoutPopup.value = false
+  // Optionally emit an event or set state to return to lobby if needed
 }
 
 const reloadBalance = async () => {

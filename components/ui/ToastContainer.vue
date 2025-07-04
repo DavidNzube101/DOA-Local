@@ -12,7 +12,7 @@
             :name="getToastIcon(toast.type)" 
             class="w-5 h-5" 
           />
-          <span class="toast-message">{{ toast.message }}</span>
+          <span class="toast-message" v-html="toast.message"></span>
         </div>
         <button 
           @click="removeToast(toast.id)"
