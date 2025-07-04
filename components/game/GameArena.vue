@@ -456,6 +456,12 @@ function startAction(key: string) {
   }
   currentModelKey = key
   currentAction = key
+  
+  // Emit action start to opponent
+  if (socket.value && socket.value.connected) {
+    socket.value.emit('player_action', { action: key, started: true })
+  }
+  
   // Show shield for defend
   if (key === 'defend') {
     toggleHexShield(true)
@@ -486,6 +492,12 @@ function startAction(key: string) {
 function stopAction() {
   currentAction = ''
   actionKeyHeld = false
+  
+  // Emit action stop to opponent
+  if (socket.value && socket.value.connected) {
+    socket.value.emit('player_action', { action: '', started: false })
+  }
+  
   // Hide shield and outline
   toggleHexShield(false)
   shieldActive.value = false
@@ -1698,6 +1710,138 @@ watch(opponentHealth, (val) => {
     console.log('[DEBUG] Opponent health reached 0, waiting for their game_end notification');
   }
 });
+
+// --- Opponent Animation State ---
+let opponentLoadedModels: { [key: string]: { scene: THREE.Object3D, animations: THREE.AnimationClip[] } } = {}
+let opponentCurrentModelKey = 'idle'
+let opponentPrevPosition = { x: 3, z: 0 }
+let opponentMoveTimeout: NodeJS.Timeout | null = null
+let opponentActionTimeout: NodeJS.Timeout | null = null
+let opponentCurrentAction = '' // 'attack', 'defend', or ''
+
+async function loadOpponentGLB(key: string) {
+  const charName = opponentCharacterName.value || 'Nyx'
+  const charNameLower = charName.toLowerCase()
+  const modelPath = `/models/${charName}/${charNameLower}_${key}.glb`
+  const loader = new GLTFLoader()
+  try {
+    const gltf = await loader.loadAsync(modelPath)
+    return { scene: gltf.scene, animations: gltf.animations }
+  } catch (e) {
+    console.error(`[Opponent] Failed to load ${key} model:`, e)
+    return null
+  }
+}
+
+async function preloadAllOpponentModels() {
+  const keys = ['idle', 'move', 'attack', 'defend']
+  for (const key of keys) {
+    const result = await loadOpponentGLB(key)
+    if (result) opponentLoadedModels[key] = result
+  }
+}
+
+function switchOpponentModel(key: string) {
+  if (!scene || !opponentLoadedModels[key]) return
+  if (opponentModel) scene.remove(opponentModel)
+  opponentModel = opponentLoadedModels[key].scene
+  centerAndScaleModel(opponentModel, 2)
+  opponentModel.position.set(opponentPosition.value.x, 0.7, opponentPosition.value.z)
+  // Face the same direction as before (optional: could interpolate)
+  scene.add(opponentModel)
+  opponentMixer = new THREE.AnimationMixer(opponentModel)
+  if (opponentLoadedModels[key].animations.length > 0) {
+    const newAction = opponentMixer.clipAction(opponentLoadedModels[key].animations[0])
+    newAction.reset().play()
+  }
+  opponentCurrentModelKey = key
+}
+
+// Patch loadOpponentModel to only load/call idle, and preload all
+async function loadOpponentModel() {
+  await preloadAllOpponentModels()
+  switchOpponentModel('idle')
+}
+
+// --- Opponent movement animation logic ---
+function handleOpponentMovementAnimation(newPos) {
+  const dist = Math.sqrt(
+    Math.pow(newPos.x - opponentPrevPosition.x, 2) +
+    Math.pow(newPos.z - opponentPrevPosition.z, 2)
+  )
+  const isMoving = dist > 0.01
+  if (isMoving) {
+    if (opponentCurrentModelKey !== 'move' && opponentCurrentAction === '') {
+      switchOpponentModel('move')
+    }
+    // Debounce: after 200ms of no movement, switch back to idle
+    if (opponentMoveTimeout) clearTimeout(opponentMoveTimeout)
+    opponentMoveTimeout = setTimeout(() => {
+      if (opponentCurrentAction === '') {
+        switchOpponentModel('idle')
+      }
+    }, 200)
+  } else {
+    if (opponentCurrentModelKey !== 'idle' && opponentCurrentAction === '') {
+      switchOpponentModel('idle')
+    }
+  }
+  opponentPrevPosition = { ...newPos }
+}
+
+// --- Opponent action animation logic ---
+function handleOpponentActionAnimation(action: string, started: boolean) {
+  if (started) {
+    opponentCurrentAction = action
+    if (action === 'attack') {
+      switchOpponentModel('attack')
+      // Attack animations are brief - switch back after 800ms
+      if (opponentActionTimeout) clearTimeout(opponentActionTimeout)
+      opponentActionTimeout = setTimeout(() => {
+        opponentCurrentAction = ''
+        if (!isMoving()) {
+          switchOpponentModel('idle')
+        } else {
+          switchOpponentModel('move')
+        }
+      }, 800)
+    } else if (action === 'defend') {
+      switchOpponentModel('defend')
+      // Defend animations are continuous until stopped
+    }
+  } else {
+    // Action stopped
+    opponentCurrentAction = ''
+    if (opponentActionTimeout) {
+      clearTimeout(opponentActionTimeout)
+      opponentActionTimeout = null
+    }
+    if (!isMoving()) {
+      switchOpponentModel('idle')
+    } else {
+      switchOpponentModel('move')
+    }
+  }
+}
+
+// In socket event for opponent_state, after updating opponentPosition:
+socket.value.on('opponent_state', (data: any) => {
+  if (typeof data.x === 'number' && typeof data.z === 'number') {
+    opponentPosition.value = { x: data.x, z: data.z }
+    handleOpponentMovementAnimation(opponentPosition.value)
+  }
+  if (typeof data.health === 'number') {
+    opponentHealth.value = data.health
+  }
+})
+
+// Add opponent action listener
+socket.value.on('opponent_action', (data: any) => {
+  console.log('[DEBUG] Received opponent_action:', data)
+  if (data && typeof data.action === 'string' && typeof data.started === 'boolean') {
+    handleOpponentActionAnimation(data.action, data.started)
+  }
+})
 </script>
 
 <style scoped>
