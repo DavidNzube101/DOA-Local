@@ -466,17 +466,7 @@ function startAction(key: string) {
   if (key === 'defend') {
     toggleHexShield(true)
     disableAttackOutline()
-    // Start defend drain
-    if (!defendDrainInterval) {
-      defendDrainInterval = setInterval(() => {
-        if (currentAction === 'defend' && !gameEnded.value) {
-          playerHealth.value = Math.max(0, playerHealth.value - 1)
-          if (playerHealth.value <= 0) {
-            endGame(false, 'You exhausted yourself defending!')
-          }
-        }
-      }, 500)
-    }
+    // Note: defend drain is handled in useShield() function
   } else if (key === 'attack') {
     enableAttackOutline()
     toggleHexShield(false)
@@ -1235,9 +1225,16 @@ onMounted(() => {
       console.log('[DEBUG] Received opponent_state', data)
       if (typeof data.x === 'number' && typeof data.z === 'number') {
         opponentPosition.value = { x: data.x, z: data.z } // REASSIGN for reactivity!
+        handleOpponentMovementAnimation(opponentPosition.value)
       }
       if (typeof data.health === 'number') {
         opponentHealth.value = data.health
+      }
+    })
+    socket.value.on('opponent_action', (data: any) => {
+      console.log('[DEBUG] Received opponent_action:', data)
+      if (data && typeof data.action === 'string' && typeof data.started === 'boolean') {
+        handleOpponentActionAnimation(data.action, data.started)
       }
     })
     socket.value.on('opponent_disconnected', () => {
@@ -1529,26 +1526,7 @@ onMounted(() => {
   }, 3000)
 })
 
-async function loadOpponentModel() {
-  // For now, use a placeholder character (e.g., 'Nyx')
-  const charName = opponentCharacterName.value || 'Nyx'
-  const charNameLower = charName.toLowerCase()
-  const loader = new GLTFLoader()
-  try {
-    const gltf = await loader.loadAsync(`/models/${charName}/${charNameLower}_idle.glb`)
-    opponentModel = gltf.scene
-    centerAndScaleModel(opponentModel, 2)
-    opponentModel.position.set(opponentPosition.value.x, 0.7, opponentPosition.value.z)
-    scene?.add(opponentModel)
-    opponentMixer = new THREE.AnimationMixer(opponentModel)
-    if (gltf.animations.length > 0) {
-      const action = opponentMixer.clipAction(gltf.animations[0])
-      action.play()
-    }
-  } catch (e) {
-    console.warn('Failed to load opponent model:', e)
-  }
-}
+// Old loadOpponentModel function removed - replaced with new implementation below
 
 // --- Opponent health bar ---
 let opponentHealthBarDiv: HTMLDivElement | null = null
@@ -1824,24 +1802,7 @@ function handleOpponentActionAnimation(action: string, started: boolean) {
   }
 }
 
-// In socket event for opponent_state, after updating opponentPosition:
-socket.value.on('opponent_state', (data: any) => {
-  if (typeof data.x === 'number' && typeof data.z === 'number') {
-    opponentPosition.value = { x: data.x, z: data.z }
-    handleOpponentMovementAnimation(opponentPosition.value)
-  }
-  if (typeof data.health === 'number') {
-    opponentHealth.value = data.health
-  }
-})
-
-// Add opponent action listener
-socket.value.on('opponent_action', (data: any) => {
-  console.log('[DEBUG] Received opponent_action:', data)
-  if (data && typeof data.action === 'string' && typeof data.started === 'boolean') {
-    handleOpponentActionAnimation(data.action, data.started)
-  }
-})
+// Socket event listeners are now properly set up in onMounted() block above
 </script>
 
 <style scoped>
